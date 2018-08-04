@@ -12,9 +12,9 @@ namespace MSBLOC.Web.Services
 {
     public class OptionsPrivateKeySource : IPrivateKeySource
     {
-        private readonly IOptions<EnvOptions> _optionsAccessor;
+        private readonly IOptions<GitHubEnvOptions> _optionsAccessor;
 
-        public OptionsPrivateKeySource(IOptions<EnvOptions> optionsAccessor)
+        public OptionsPrivateKeySource(IOptions<GitHubEnvOptions> optionsAccessor)
         {
             _optionsAccessor = optionsAccessor;
         }

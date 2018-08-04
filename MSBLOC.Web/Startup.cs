@@ -53,11 +53,11 @@ namespace MSBLOC.Web
                 .AddOpenIdConnect("Auth0", options =>
                 {
                     // Set the authority to your Auth0 domain
-                    options.Authority = $"https://{Configuration["Auth0:Domain"]}";
+                    options.Authority = $"https://{Configuration["Auth0:Oidc:Domain"]}";
 
                     // Configure the Auth0 Client ID and Client Secret
-                    options.ClientId = Configuration["Auth0:ClientId"];
-                    options.ClientSecret = Configuration["Auth0:ClientSecret"];
+                    options.ClientId = Configuration["Auth0:Oidc:ClientId"];
+                    options.ClientSecret = Configuration["Auth0:Oidc:ClientSecret"];
 
                     // Set response type to code
                     options.ResponseType = "code";
@@ -65,6 +65,8 @@ namespace MSBLOC.Web
                     // Configure the scope
                     options.Scope.Clear();
                     options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("email");
 
                     // Set the callback path, so Auth0 will call back to http://{domain:port}/signin-auth0
                     // Also ensure that you have added the URL as an Allowed Callback URL in your Auth0 dashboard
@@ -86,7 +88,7 @@ namespace MSBLOC.Web
                         // handle the logout redirection
                         OnRedirectToIdentityProviderForSignOut = (context) =>
                         {
-                            var logoutUri = $"https://{Configuration["Auth0:Domain"]}/v2/logout?client_id={Configuration["Auth0:ClientId"]}";
+                            var logoutUri = $"https://{Configuration["Auth0:Oidc:Domain"]}/v2/logout?client_id={Configuration["Auth0:Oidc:ClientId"]}";
 
                             var postLogoutUri = context.Properties.RedirectUri;
                             if (!string.IsNullOrEmpty(postLogoutUri))
@@ -114,12 +116,13 @@ namespace MSBLOC.Web
                 options.SerializerSettings.Converters.Add(new OctokitStringEnumConverter());
             });
 
-            services.Configure<EnvOptions>(Configuration);
+            services.Configure<GitHubEnvOptions>(Configuration.GetSection("GitHub"));
+            services.Configure<Auth0ManagementApiOptions>(Configuration.GetSection("Auth0:ManagementApi"));
 
             services.AddSingleton<IPrivateKeySource, OptionsPrivateKeySource>();
             services.AddSingleton<Func<string, Task<ICheckRunSubmitter>>>(s => async repoOwner =>
             {
-                var gitHubAppId = s.GetService<IOptions<EnvOptions>>().Value.GitHubAppId;
+                var gitHubAppId = s.GetService<IOptions<GitHubEnvOptions>>().Value.GitHubAppId;
                 var privateKeySource = s.GetService<IPrivateKeySource>();
                 var gitHubTokenGenerator = new TokenGenerator(gitHubAppId, privateKeySource, s.GetService<ILogger<TokenGenerator>>());
 

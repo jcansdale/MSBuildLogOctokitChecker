@@ -15,11 +15,11 @@ namespace MSBLOC.Web.Tests.Services
         [Fact]
         public void GetPrivateKeyReaderTest()
         {
-            var options = new EnvOptions
+            var options = new GitHubEnvOptions
             {
                 GitHubAppPrivateKey = "123456"
             };
-            var optionsAccessor = Substitute.For<IOptions<EnvOptions>>();
+            var optionsAccessor = Substitute.For<IOptions<GitHubEnvOptions>>();
             optionsAccessor.Value.Returns(options);
 
             var keySource = new OptionsPrivateKeySource(optionsAccessor);

@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.1" />
     <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.1" />
+    <PackageReference Include="RestSharp" Version="105.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" />
   </ItemGroup>
@@ -23,6 +24,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MSBLOC.Core\MSBLOC.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Home\ListRepositories.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>
