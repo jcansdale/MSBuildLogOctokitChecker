@@ -24,17 +24,23 @@
         <div class="collapse navbar-collapse" id="navbarsDefault">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-controller="Account" asp-action="Claims">Claims</a>
+                    </li>
+                }
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                    <li class="nav-item active"><a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a></li>
                 }
                 else
                 {
-                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                    <li class="nav-item active" ><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a></li>
                 }
             </ul>
         </div>
